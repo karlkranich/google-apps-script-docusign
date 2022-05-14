@@ -1,5 +1,9 @@
 // Create this file in a Google Apps Script project
 // and fill in the values appropriately
+// The private key created in DocuSign must be converted to the correct form
+// with the following command before being inserted below.
+// (the downloaded key is private-rsa-key.pem and the new key is new-private.pem
+// openssl pkcs8 -topk8 -inform pem -in private-rsa-key.pem -outform pem -nocrypt -out new-private.pem
 
 const docusign = {
   tokenUri: "https://account-d.docusign.com/oauth/token",
