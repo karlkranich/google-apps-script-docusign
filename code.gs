@@ -19,3 +19,31 @@ function docusignTest1() {
     Logger.log(env.envelopeId);
   }
 }
+
+// Use a JSON Web Token to get a DocuSign Auth Token
+function getAccessToken() {
+  // Get a Json Web Token
+  const jwt = createJwt({
+    privateKey: docusign.privateKey,
+    expiresInHours: 1,
+    data: docusign.data,
+  });
+
+  // Use the JWT to get an auth token
+  var formData = {
+    'grant_type': 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+    'assertion': jwt
+  };
+  var options = {
+    'method' : 'post',
+    'payload' : formData
+  };
+  var response = UrlFetchApp.fetch(docusign.tokenUri, options);
+  if (response.getResponseCode() != 200) {
+    Logger.log("Auth token request failed");
+    return;
+  } else {
+    var responseObj = JSON.parse(response.getContentText());
+    return(responseObj.access_token);
+  }
+}
